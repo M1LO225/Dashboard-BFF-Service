@@ -2,15 +2,17 @@ import uuid
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+
 from core.config import settings
 
-# Point to the Auth Service's token endpoint
+# This URL should point to the login endpoint of your Auth Service.
+# The client (frontend) will use this to know where to get a token.
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 def get_current_user_id(token: str = Depends(oauth2_scheme)) -> uuid.UUID:
     """
-    Dependency to get the current user's ID from the JWT.
-    Raises HTTPException if credentials are invalid or token is malformed.
+    Decodes the JWT token to get the user's ID.
+    Raises an exception if the token is invalid or missing.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -19,17 +21,13 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)) -> uuid.UUID:
     )
     
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
+        user_id_str: str | None = payload.get("user_id")
+        if user_id_str is None:
+            raise credentials_exception
     except JWTError:
         raise credentials_exception
         
-    user_id_str: str = payload.get("user_id")
-    if user_id_str is None:
-        raise credentials_exception
-    
-    try:
-        user_id = uuid.UUID(user_id_str)
-    except ValueError:
-        raise credentials_exception # Invalid UUID format
-        
-    return user_id
+    return uuid.UUID(user_id_str)

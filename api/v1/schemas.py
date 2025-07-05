@@ -1,44 +1,33 @@
-import uuid
+from pydantic import BaseModel
 from typing import List, Optional
-from pydantic import BaseModel, Field
+import uuid
 from datetime import datetime
 
-# Reusing the models from domain.entities.dashboard as they are already presentation-ready.
-# This avoids duplication and ensures consistency between the internal aggregated data
-# and the external API response.
-
-# --- Response Schemas ---
-
-class RiskDetail(BaseModel):
-    """Schema for a single risk detail within an asset."""
+class RiskDetailResponse(BaseModel):
     id: uuid.UUID
     cve_id: str
     cvss_score: float
-    risk_score: float = Field(..., alias="nr_score") # Alias for NR score
+    risk_score: float
 
     class Config:
         from_attributes = True
-        populate_by_name = True # Allow mapping by alias
 
-class AssetDetail(BaseModel):
-    """Schema for a single asset with its valuation and associated risks."""
+class AssetDetailResponse(BaseModel):
     id: uuid.UUID
     value: str
-    asset_type: str # Added asset_type for more context
     sca_score: Optional[float] = None
-    risks: List[RiskDetail] = []
+    risks: List[RiskDetailResponse] = []
 
     class Config:
         from_attributes = True
 
-class DashboardData(BaseModel):
-    """Comprehensive schema for the entire dashboard view."""
+class DashboardResponse(BaseModel):
     scan_id: uuid.UUID
     domain_name: str
     status: str
     requested_at: datetime
-    total_risk_score: Optional[float] = Field(0.0, description="Average NR score for the scan")
-    assets: List[AssetDetail] = []
+    total_risk_score: Optional[float] = 0.0
+    assets: List[AssetDetailResponse] = []
 
     class Config:
         from_attributes = True
