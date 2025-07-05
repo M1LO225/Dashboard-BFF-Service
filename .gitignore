@@ -1,0 +1,90 @@
+/core/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment
+.env
+.env.*
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# VSCode / other editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# MyPy / Pylint / Flake8
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+*.lint
+
+# Local database, logs
+*.db
+*.sqlite3
+*.log
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# SQLAlchemy migrations (if Alembic is used)
+migrations/
+alembic.ini
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Venvs
+venv/
+ENV/
+env/
+.venv/
