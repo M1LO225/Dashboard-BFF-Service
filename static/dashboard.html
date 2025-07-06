@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Risk Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://via.placeholder.com/40" alt="Logo">
+                <h1>Cyber Risk Dashboard</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="#overview">Resumen</a>
+                <a href="#scans">Escaneos</a>
+                <a href="#assets">Activos</a>
+                <a href="#reports">Informes</a>
+            </nav>
+            <div class="user-info">
+                <span id="user-display-name">Usuario Anónimo</span>
+                <button id="logout-button" class="logout-button">Salir</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <p id="dashboard-message" class="message"></p>
+
+        <section id="dashboard-main-section" class="dashboard-grid">
+            <div class="card scan-initiation">
+                <h2>Iniciar Nuevo Escaneo</h2>
+                <form id="initiate-scan-form">
+                    <div class="input-group">
+                        <label for="target-domain">Dominio o IP:</label>
+                        <input type="text" id="target-domain" placeholder="ej. udla.com" required>
+                        <small class="help-text">Ingrese el dominio o dirección IP a escanear.</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="acceptable-loss">Pérdida Aceptable (USD):</label>
+                        <input type="number" id="acceptable-loss" value="1000" min="0" required>
+                        <small class="help-text">Monto máximo de pérdida monetaria considerada aceptable.</small>
+                    </div>
+                    <button type="submit" class="action-button">Iniciar Escaneo</button>
+                </form>
+            </div>
+
+            <div class="card recent-scans">
+                <h2>Escaneos Recientes</h2>
+                <ul id="recent-scans-list">
+                    <li class="loading-state">Cargando escaneos...</li>
+                </ul>
+                <a href="#" class="view-all-link">Ver todos los escaneos</a>
+            </div>
+
+            <div class="card risk-distribution-chart">
+                <h2>Distribución de Riesgos (Total)</h2>
+                <div class="chart-container">
+                    <canvas id="riskDistributionChart"></canvas>
+                </div>
+                <p class="chart-info">Muestra la proporción de riesgos por nivel (simulado).</p>
+            </div>
+
+            <div class="card quick-stats">
+                <h2>Estadísticas Rápidas</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Escaneos Completados</h3>
+                        <p id="stat-completed-scans">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Activos Descubiertos</h3>
+                        <p id="stat-discovered-assets">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Vulnerabilidades Identificadas</h3>
+                        <p id="stat-identified-vulnerabilities">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Riesgo Medio Global</h3>
+                        <p id="stat-global-risk">N/A</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scan-detail-section" class="scan-detail-view hidden">
+            <button id="back-to-dashboard" class="back-button">&larr; Volver al Dashboard</button>
+            <h2 id="detail-scan-title">Detalles del Escaneo: [Dominio]</h2>
+
+            <div class="scan-summary-grid">
+                <div class="summary-item">
+                    <h3>Estado:</h3>
+                    <p id="detail-scan-status" class="status-badge">PENDING</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Puntaje NR:</h3>
+                    <p id="detail-scan-nr-score">N/A</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Fecha Inicio:</h3>
+                    <p id="detail-scan-start-date">N/A</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Fecha Fin:</h3>
+                    <p id="detail-scan-end-date">N/A</p>
+                </div>
+            </div>
+
+            <div class="assets-section">
+                <h3>Activos Descubiertos:</h3>
+                <div id="detail-assets-list" class="assets-grid">
+                    <p class="loading-state">Cargando activos...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

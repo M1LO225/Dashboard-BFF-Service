@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Risk Dashboard - Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>Cyber Risk Dashboard</h1>
+            <p id="message" class="message"></p>
+
+            <form id="login-form">
+                <h2>Iniciar Sesión</h2>
+                <div class="input-group">
+                    <label for="login-username">Usuario:</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Contraseña:</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="auth-button">Entrar</button>
+                <p class="switch-form">¿No tienes cuenta? <a href="#" id="show-register">Regístrate</a></p>
+            </form>
+
+            <form id="register-form" class="hidden">
+                <h2>Registrarse</h2>
+                <div class="input-group">
+                    <label for="register-username">Usuario:</label>
+                    <input type="text" id="register-username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-password">Contraseña:</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Contraseña:</label>
+                    <input type="password" id="confirm-password" name="confirm_password" required>
+                </div>
+                <button type="submit" class="auth-button">Crear Cuenta</button>
+                <p class="switch-form">¿Ya tienes cuenta? <a href="#" id="show-login">Iniciar Sesión</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
