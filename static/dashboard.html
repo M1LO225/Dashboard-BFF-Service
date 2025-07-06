@@ -3,123 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Risk Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Dashboard - Plataforma de Evaluación de Riesgos Ciberseguridad</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css"> 
 </head>
 <body>
-    <header class="dashboard-header">
-        <div class="header-content">
-            <div class="logo">
-                <img src="https://via.placeholder.com/40" alt="Logo">
-                <h1>Cyber Risk Dashboard</h1>
-            </div>
-            <nav class="main-nav">
-                <a href="#overview">Resumen</a>
-                <a href="#scans">Escaneos</a>
-                <a href="#assets">Activos</a>
-                <a href="#reports">Informes</a>
-            </nav>
-            <div class="user-info">
-                <span id="user-display-name">Usuario Anónimo</span>
-                <button id="logout-button" class="logout-button">Salir</button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Risk Assessment</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3" id="user-display"></span>
+                <button class="btn btn-outline-light" id="logout-btn">Cerrar Sesión</button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="main-content">
-        <p id="dashboard-message" class="message"></p>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 app-title">Dashboard de Evaluación de Riesgos</h1>
 
-        <section id="dashboard-main-section" class="dashboard-grid">
-            <div class="card scan-initiation">
-                <h2>Iniciar Nuevo Escaneo</h2>
-                <form id="initiate-scan-form">
-                    <div class="input-group">
-                        <label for="target-domain">Dominio o IP:</label>
-                        <input type="text" id="target-domain" placeholder="ej. udla.com" required>
-                        <small class="help-text">Ingrese el dominio o dirección IP a escanear.</small>
+        <div id="message-area" class="alert alert-info text-center" role="alert" style="display: none;"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                    <div class="card-header card-title h5">Iniciar Nuevo Escaneo</div>
+                    <div class="card-body">
+                        <form id="scan-form">
+                            <div class="mb-3">
+                                <label for="domain-name" class="form-label">Dominio a Escanear:</label>
+                                <input type="text" class="form-control" id="domain-name" value="example.com" placeholder="ej. example.com" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Iniciar Escaneo</button>
+                        </form>
                     </div>
-                    <div class="input-group">
-                        <label for="acceptable-loss">Pérdida Aceptable (USD):</label>
-                        <input type="number" id="acceptable-loss" value="1000" min="0" required>
-                        <small class="help-text">Monto máximo de pérdida monetaria considerada aceptable.</small>
-                    </div>
-                    <button type="submit" class="action-button">Iniciar Escaneo</button>
-                </form>
-            </div>
-
-            <div class="card recent-scans">
-                <h2>Escaneos Recientes</h2>
-                <ul id="recent-scans-list">
-                    <li class="loading-state">Cargando escaneos...</li>
-                </ul>
-                <a href="#" class="view-all-link">Ver todos los escaneos</a>
-            </div>
-
-            <div class="card risk-distribution-chart">
-                <h2>Distribución de Riesgos (Total)</h2>
-                <div class="chart-container">
-                    <canvas id="riskDistributionChart"></canvas>
                 </div>
-                <p class="chart-info">Muestra la proporción de riesgos por nivel (simulado).</p>
-            </div>
 
-            <div class="card quick-stats">
-                <h2>Estadísticas Rápidas</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Escaneos Completados</h3>
-                        <p id="stat-completed-scans">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Activos Descubiertos</h3>
-                        <p id="stat-discovered-assets">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Vulnerabilidades Identificadas</h3>
-                        <p id="stat-identified-vulnerabilities">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Riesgo Medio Global</h3>
-                        <p id="stat-global-risk">N/A</p>
+                <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                    <div class="card-header card-title h5">Cargar Dashboard Existente</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="scan-id-input" class="form-label">ID de Escaneo (UUID):</label>
+                            <input type="text" class="form-control" id="scan-id-input" placeholder="ej. 123e4567-e89b-12d3-a456-426614174000">
+                        </div>
+                        <button class="btn btn-info w-100" type="button" id="load-dashboard-btn">Cargar Dashboard</button>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section id="scan-detail-section" class="scan-detail-view hidden">
-            <button id="back-to-dashboard" class="back-button">&larr; Volver al Dashboard</button>
-            <h2 id="detail-scan-title">Detalles del Escaneo: [Dominio]</h2>
-
-            <div class="scan-summary-grid">
-                <div class="summary-item">
-                    <h3>Estado:</h3>
-                    <p id="detail-scan-status" class="status-badge">PENDING</p>
-                </div>
-                <div class="summary-item">
-                    <h3>Puntaje NR:</h3>
-                    <p id="detail-scan-nr-score">N/A</p>
-                </div>
-                <div class="summary-item">
-                    <h3>Fecha Inicio:</h3>
-                    <p id="detail-scan-start-date">N/A</p>
-                </div>
-                <div class="summary-item">
-                    <h3>Fecha Fin:</h3>
-                    <p id="detail-scan-end-date">N/A</p>
+            <div class="col-md-8">
+                <div id="dashboard-container" class="card shadow-sm p-4 bg-white rounded">
+                    <div class="card-body text-center">
+                        <p class="text-muted">Selecciona un escaneo o inicia uno nuevo para ver el dashboard.</p>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="assets-section">
-                <h3>Activos Descubiertos:</h3>
-                <div id="detail-assets-list" class="assets-grid">
-                    <p class="loading-state">Cargando activos...</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="/static/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script> 
 </body>
 </html>

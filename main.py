@@ -4,7 +4,6 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
 # Asegúrate de que esta importación sea correcta según tu estructura
-# Por ejemplo: from .api.v1 import dashboard_router
 from api.v1 import dashboard_router
 
 app = FastAPI(
@@ -14,17 +13,16 @@ app = FastAPI(
 )
 
 # --- Configuración para servir archivos estáticos ---
-# Asegúrate de que la carpeta 'static' exista en la raíz de tu proyecto
 STATIC_DIR = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # --- Rutas para servir los archivos HTML principales del frontend ---
-@app.get("/", response_class=HTMLResponse, summary="Página de Login/Registro del Frontend")
+@app.get("/", response_class=HTMLResponse, summary="Página de Login del Frontend")
 async def read_root():
     """
-    Sirve el archivo HTML principal (login/registro) para la raíz de la aplicación.
+    Sirve el archivo HTML principal (login) para la raíz de la aplicación.
     """
-    with open(STATIC_DIR / "index.html", "r", encoding="utf-8") as f:
+    with open(STATIC_DIR / "index.html", "r", encoding="utf-8") as f: # Correcto: index.html
         return f.read()
 
 @app.get("/dashboard", response_class=HTMLResponse, summary="Página Principal del Dashboard del Frontend")
