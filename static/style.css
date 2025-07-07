@@ -1,0 +1,155 @@
+/* style.css */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-color: #dee2e6;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+}
+
+.navbar {
+    background-color: var(--dark-color) !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.app-title {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Estilo específico para la tarjeta de login para centrarla mejor */
+.login-card {
+    max-width: 400px;
+    margin: 3rem auto;
+}
+
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+
+.card-header.bg-primary { /* Asegurar que el header del dashboard también sea primario */
+    background-color: var(--primary-color) !important;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+}
+
+.alert {
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.alert-error, .alert-danger { /* Usamos alert-error en JS, pero alert-danger de Bootstrap */
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.badge {
+    padding: 0.5em 0.75em;
+    font-size: 0.85em;
+    font-weight: 600;
+    border-radius: 0.35rem;
+    vertical-align: middle;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: var(--primary-color);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.125);
+}
+
+.accordion-button::after {
+    filter: invert(1); /* Para que el icono sea blanco cuando el botón está activo */
+}
+
+.accordion-item {
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.accordion-item:last-of-type {
+    margin-bottom: 0;
+}
+
+.accordion-button {
+    font-weight: 500;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.25rem;
+    border-radius: 0.35rem;
+    background-color: var(--light-color);
+}
+
+.list-group-item:last-child {
+    margin-bottom: 0;
+}

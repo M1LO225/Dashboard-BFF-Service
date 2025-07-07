@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Plataforma de Evaluación de Riesgos Ciberseguridad</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css"> 
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Risk Assessment</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3" id="user-display"></span>
+                <button class="btn btn-outline-light" id="logout-btn">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 app-title">Dashboard de Evaluación de Riesgos</h1>
+
+        <div id="message-area" class="alert alert-info text-center" role="alert" style="display: none;"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                    <div class="card-header card-title h5">Iniciar Nuevo Escaneo</div>
+                    <div class="card-body">
+                        <form id="scan-form">
+                            <div class="mb-3">
+                                <label for="domain-name" class="form-label">Dominio a Escanear:</label>
+                                <input type="text" class="form-control" id="domain-name" value="example.com" placeholder="ej. example.com" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Iniciar Escaneo</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                    <div class="card-header card-title h5">Cargar Dashboard Existente</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="scan-id-input" class="form-label">ID de Escaneo (UUID):</label>
+                            <input type="text" class="form-control" id="scan-id-input" placeholder="ej. 123e4567-e89b-12d3-a456-426614174000">
+                        </div>
+                        <button class="btn btn-info w-100" type="button" id="load-dashboard-btn">Cargar Dashboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="dashboard-container" class="card shadow-sm p-4 bg-white rounded">
+                    <div class="card-body text-center">
+                        <p class="text-muted">Selecciona un escaneo o inicia uno nuevo para ver el dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script> 
+</body>
+</html>
