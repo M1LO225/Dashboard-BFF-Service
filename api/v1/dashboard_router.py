@@ -1,46 +1,43 @@
+# api/v1/dashboard_router.py
+
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from api.v1.security import get_current_user_id
-from domain.entities.dashboard import DashboardData # Import the domain model for response
+# Cambia el import de la respuesta si es necesario, asegúrate que el modelo Pydantic sea el correcto
+from domain.entities.dashboard import DashboardData 
 from application.use_cases.get_dashboard_data import GetDashboardDataUseCase
 from infrastructure.cache.redis_cache import RedisCache
-from infrastructure.database.connection import get_db # Import the database dependency
 from infrastructure.repositories.postgres_dashboard_repository import PostgresDashboardRepository
 
 router = APIRouter()
 
-@router.get("/{scan_id}", response_model=DashboardData, summary="Get Aggregated Dashboard Data for a Scan")
+@router.get("/{scan_id}", response_model=DashboardData)
 def get_dashboard_data(
     scan_id: uuid.UUID,
-    db: Session = Depends(get_db), # Inject a database session
-    user_id: uuid.UUID = Depends(get_current_user_id) # Ensure authentication
+    user_id: uuid.UUID = Depends(get_current_user_id)
 ):
     """
-    Retrieves the comprehensive aggregated dashboard data for a specific scan ID.
-    This endpoint is protected by JWT authentication.
-    
-    - **scan_id**: The unique identifier of the scan to retrieve data for.
-    - **user_id**: The ID of the authenticated user (obtained from JWT).
-    
-    Returns all relevant information about the scan, including assets, vulnerabilities,
-    and calculated risks, in a single structured response.
+    Retrieves the aggregated dashboard data for a specific scan.
     """
-    # Dependency Injection: Instantiate the concrete implementations
-    # and pass them to the use case.
-    repo = PostgresDashboardRepository(db) # Repository needs a DB session
-    cache = RedisCache() # Cache client
-    use_case = GetDashboardDataUseCase(repo, cache)
+    try:
+        # La inyección de dependencias ahora se hace aquí directamente
+        repo = PostgresDashboardRepository()
+        cache = RedisCache()
+        use_case = GetDashboardDataUseCase(repo, cache)
 
-    # Execute the use case to fetch the dashboard data
-    dashboard = use_case.execute(scan_id=scan_id, user_id=user_id)
-    
-    if not dashboard:
-        # If no dashboard data is found (e.g., scan_id does not exist or user lacks permission)
+        dashboard = use_case.execute(scan_id=scan_id, user_id=user_id)
+        
+        if not dashboard:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, 
+                detail="Scan not found or you do not have permission to view it."
+            )
+
+        return dashboard
+    except Exception as e:
+        # Captura cualquier otra excepción para evitar que el servidor se caiga
+        # y devuelve un error 500 genérico. Los detalles se verán en los logs.
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Scan not found or you do not have permission to view it."
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An internal error occurred: {e}"
         )
-
-    # Return the aggregated data, FastAPI will serialize it to JSON
-    return dashboard

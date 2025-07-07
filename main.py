@@ -10,7 +10,6 @@ app = FastAPI(
 # Include the router for the dashboard API
 app.include_router(
     dashboard_router.router,
-    prefix="/api/v1/dashboards",
     tags=["Dashboards"]
 )
 

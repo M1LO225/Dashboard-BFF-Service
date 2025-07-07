@@ -1,0 +1,106 @@
+services:
+  # --- BASES DE DATOS (DEPENDENCIAS) ---
+  postgres_scan:
+    image: postgres:15-alpine
+    container_name: postgres_scan_db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=GaBR1302cm#$
+      - POSTGRES_DB=scan_db
+    volumes:
+      - postgres_scan_data:/var/lib/postgresql/data
+    healthcheck:
+      # CORREGIDO: Usar el usuario 'postgres' que se define arriba
+      test: ["CMD-SHELL", "pg_isready -U postgres -d scan_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices_net
+
+  postgres_asset:
+    image: postgres:15-alpine
+    container_name: postgres_asset_db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=GaBR1302cm#$
+      - POSTGRES_DB=asset_db
+    volumes:
+      - postgres_asset_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  postgres_vuln:
+    image: postgres:15-alpine
+    container_name: postgres_vuln_db
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=GaBR1302cm#$
+      - POSTGRES_DB=vuln_db
+    volumes:
+      - postgres_vuln_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  postgres_risk:
+    image: postgres:15-alpine
+    container_name: postgres_risk_db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=GaBR1302cm#$
+      - POSTGRES_DB=risk_db
+    volumes:
+      - postgres_risk_data:/var/lib/postgresql/data
+    networks:
+      - microservices_net
+
+  # --- CACHÉ (DEPENDENCIA) ---
+  redis_cache:
+    image: redis:7-alpine
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    networks:
+      - microservices_net
+
+  # --- SERVICIO PRINCIPAL A PROBAR (AÑADIDO) ---
+  dashboard-bff-service:
+    build:
+      # CORREGIDO: El contexto es '.' porque el docker-compose.yml está en la misma carpeta que el Dockerfile
+      context: .
+      dockerfile: Dockerfile
+    container_name: dashboard_bff_api
+    ports:
+      # Usamos 8001 como en tus pruebas anteriores. Mapea el puerto 8000 del contenedor al 8001 de tu máquina.
+      - "8001:8000"
+    env_file:
+      # Le decimos que cargue la configuración desde un archivo .env
+      - .env
+    networks:
+      - microservices_net
+    # Nos aseguramos de que las BBDD y Redis arranquen antes que este servicio
+    depends_on:
+      - postgres_scan
+      - postgres_asset
+      - postgres_vuln
+      - postgres_risk
+      - redis_cache
+
+# --- VOLÚMENES Y REDES ---
+volumes:
+  postgres_scan_data:
+  postgres_asset_data:
+  postgres_vuln_data:
+  postgres_risk_data:
+
+networks:
+  microservices_net:
+    driver: bridge
